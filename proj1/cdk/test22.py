@@ -36,6 +36,26 @@ class Test22(Stack):
                          versioning_configuration=s3.CfnBucket.VersioningConfigurationProperty(status="Enabled"))
             
         # s3_arn=bucket.arn
+
+        alertbucket= s3.Bucket(self, "sks-test-bucket-1",
+                          bucket_name="sks-test-bucket-1",
+                          block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
+                          bucket_key_enabled= False , encryption= s3.BucketEncryption.S3_MANAGED,
+                          versioned= True,
+                        #   RemovalPolicy=s3.RemovalPolicy.DESTROY                                     
+                          
+                          )
+        
+
+        # alertbucket=s3.CfnBucket( self, "sks-test-bucket-1",bucket_name="sks-test-bucket-1",
+        #                 access_control="Private", 
+        #                 bucket_encryption=s3.CfnBucket.BucketEncryptionProperty( 
+        #                     server_side_encryption_configuration=[ 
+        #                         s3.CfnBucket.ServerSideEncryptionRuleProperty( 
+        #                             server_side_encryption_by_default=s3.CfnBucket.ServerSideEncryptionByDefaultProperty( 
+        #                                 sse_algorithm="AES256" ) ) ] ), 
+        #                 public_access_block_configuration=s3.BlockPublicAccess.BLOCK_ALL,
+        #                  versioning_configuration=s3.CfnBucket.VersioningConfigurationProperty(status="Enabled"))
             
             
             

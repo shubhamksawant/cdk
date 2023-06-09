@@ -19,6 +19,10 @@ from aws_cdk import (
     aws_secretsmanager as secrets
 )
 from constructs import Construct
+from cdk.test22 import Test22
+
+
+
 # from shared_module import s3_arn
 
 class Test2Stack(Stack):
@@ -95,7 +99,12 @@ class Test2Stack(Stack):
         #             )             
         #         ]
         #     )
-            
+
+
+        
+        topic = sns.Topic(self, 'MyTopic')
+
+        
     
         
             # bucket added replication rule 
@@ -128,9 +137,25 @@ class Test2Stack(Stack):
                          notification_configuration = s3.CfnBucket.NotificationConfigurationProperty(
                              topic_configurations=[s3.CfnBucket.TopicConfigurationProperty(
                                 event="s3:Replication:*",
-                                topic="arn:aws:sns:us-east-2:276301730779:test", )]
+                                topic=topic.topic_arn)]
                                              
                          ) )
+        
+
+        policy_statement = iam.PolicyStatement(
+            effect=iam.Effect.ALLOW,
+            actions=["sns:Publish"],
+            resources=[topic.topic_arn],
+            conditions={
+                "ArnLike": {
+                    "aws:SourceArn": bucket.attr_arn
+                }
+            },
+            principals=[
+                iam.ServicePrincipal("s3.amazonaws.com")
+            ]
+        )
+        topic.add_to_resource_policy(policy_statement)
             
             
             
